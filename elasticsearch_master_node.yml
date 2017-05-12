@@ -1,0 +1,36 @@
+# ======================== Elasticsearch Configuration =========================
+#
+# Para mais informações de configuração do Elasticsearch, ver a documentação:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/setup-configuration.html>
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Definir nome do cluster
+  cluster.name: SIC_UTAD
+# Definir nome do Nó
+  node.name: BI_SIC_UTAD_MasterNode
+# Definir se o nó é mestre ou escravo
+  node.master: true
+# Definir se o nó terá dados
+  node.data: true
+# Definir que o nó permite apenas a alocação de primary shards 
+# (cada shard é uma única instância Lucene)
+  cluster.routing.allocation.enable: primaries
+#
+# ---------------------------------- Rede -----------------------------------
+#
+# Definir o endereço de ligação para um IP específico (IPv4 or IPv6):
+  network.host: 0.0.0.0
+# Para mais informação sobre o processo de descoberta, ver a documentação:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html>
+#
+# --------------------------------- Descoberta ----------------------------------
+#
+# Por defeito o Elasticsearch descobre os nós via unicast
+#
+# Desativar multicast para que possa funcionar no modo unicast
+  discovery.zen.ping.multicast.enabled: false
+# Definir máquina 
+  discovery.zen.ping.unicast.hosts: ["IP_Maquina_Master:9300"]
+# Para mais informação sobre o processo de descoberta, ver a documentação:
+# <http://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html>

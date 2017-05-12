@@ -1,0 +1,148 @@
+::Alguma documentação sobre o NGINX
+:: http://wiki.nginx.org/Pitfalls
+:: http://wiki.nginx.org/QuickStart
+:: http://wiki.nginx.org/Configuration
+
+::Definição de quais as ações a serem efetuadas por um servidor. Neste caso apenas existe um bloco deste tipo
+server
+{
+	::Escutar o porto 80 (TCP)
+	listen 80;
+	::Server name é o localhost (funciona melhor se colocar 127.0.0.1)
+	server_name 127.0.0.1; 
+	::Apenas é dada permissão a quem se autenticar, uma vez que não foi definida uma lista de IP's em que o acesso fosse permitido sem efetuar autenticação
+	deny all;
+	::Mecanismo de autenticacao
+	auth_basic "Restricted Access";
+	::Ficheiro que contém os utilizadores que podem aceder à interface web do Kibana e Plugins do Elasticsearch
+	auth_basic_user_file /etc/nginx/htpasswd.users;
+
+	::Root da aplicação (Apresentação de informação sobre Elasticsearch instalado)
+	location /
+	{
+		::Define o protocolo e o endereço de um servidor proxy e um URI opcional ao qual um local deve ser mapeado
+		proxy_pass http://127.0.0.1:9200;
+		::Definição de uma expressão regular para chegar a uma localização
+		rewrite ^/es(.*) /$1 break;
+	}
+
+	::Localização do Elasticsearch
+	location ~ ^/es.*$
+	{
+		proxy_pass http://127.0.0.1:9200;
+		rewrite ^/es(.*) /$1 break;
+	}
+
+	::Localização do Kibana (separador Discover - "Home Page")
+	location /kibana
+	{
+		proxy_pass http://127.0.0.1:5601/app/kibana;
+		::Versão do protocolo HTTP
+		proxy_http_version 1.1;
+		::Necessário para aceder às propriedades dos switching protocols (válido apenas a partir da versão 1.3.13)
+		proxy_set_header Upgrade $http_upgrade;
+		::Utilizado para verificar o estado da conexão entre cliente e servidor
+		proxy_set_header Connection "upgrade";
+		::Utilizado para reescrever o IP ou nome e o número de porta do cliente
+		proxy_set_header Host $host;
+	}
+
+	::Localização dos bundles do Kibana
+	location /bundles
+	{
+		proxy_pass http://127.0.0.1:5601/bundles;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização do Elasticsearch
+	location /elasticsearch
+	{
+		proxy_pass http://127.0.0.1:5601/elasticsearch;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+	
+	::Localização dos plugins do Kibana
+	location /plugins
+	{
+		proxy_pass http://127.0.0.1:5601/plugins;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização das app do Kibana
+	location /app/
+	{
+		proxy_pass http://127.0.0.1:5601/app/;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização do Kibana (Separador relacionado com o estado do servidor e do Elasticsearch)
+	location /status/
+	{
+		proxy_pass http://127.0.0.1:5601/status;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização do Kibana (Separador relacionado com o estado do servidor e do Elasticsearch)
+	location /api/status/
+	{
+		proxy_pass http://127.0.0.1:5601/api/status;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização do Kibana (separador Discover - "Home Page")
+	location /#/
+	{
+		proxy_pass http://127.0.0.1:5601/app/kibana#/;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "upgrade";
+		proxy_set_header Host $host;
+	}
+
+	::Localização do plugin Kopf
+	location ~ ^/kopf.*$
+	{
+		proxy_pass http://127.0.0.1:9200;
+		::Definição de timeout para resposta
+		proxy_read_timeout 90;
+		rewrite ^/kopf(.*) /_plugin/kopf/$1 break;
+	}
+
+	::Localização do plugin Elastic HQ
+	location ~ ^/hq.*$
+	{
+		proxy_pass http://127.0.0.1:9200;
+		rewrite ^/hq(.*) /_plugin/hq/$1 break;
+	}
+
+	::Localização das páginas de erro costumizadas
+	error_page 403 /error/403.html;
+	error_page 404 /error/404.html;
+	error_page 405 /error/405.html;
+	error_page 500 501 502 503 504 /error/5xx.html;
+
+	::Localização das páginas de erro por defeito
+	location ^~ /error/
+	{
+		internal;
+		root /var/www/default;
+	}
+}			
