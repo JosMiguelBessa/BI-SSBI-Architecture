@@ -1,4 +1,4 @@
-﻿//Bibliotecas utilizadas para a conceção desta aplicação
+﻿//Bibliotecas utilizadas para a conceção desta aplicação 
 using System; //Utilizada como base do projeto (e.g. definir e manipular eventos, interfaces, atributos, exceções)
 using System.Collections.Generic; //Utilizada para definir coleções genéricas
 using System.ComponentModel; //Utilizada para implementar o comportamento de tempo de execução e tempo de design de componentes e controlos
