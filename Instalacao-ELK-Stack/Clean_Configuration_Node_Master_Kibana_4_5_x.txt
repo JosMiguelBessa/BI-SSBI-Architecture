@@ -46,7 +46,7 @@ echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -
 ::Atualizar a base de dados de packages da ferramenta APT
 apt-get update
 
-::Instalar do serviço Kibana
+::Instalar o serviço Kibana
 apt-get -y install kibana
 
 ::Autorizar o serviço Kibana e arrancá-lo
