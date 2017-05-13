@@ -12,7 +12,7 @@ server
 	server_name 127.0.0.1; 
 	::Apenas é dada permissão a quem se autenticar, uma vez que não foi definida uma lista de IP's em que o acesso fosse permitido sem efetuar autenticação
 	deny all;
-	::Mecanismo de autenticacao
+	::Mecanismo de autenticação
 	auth_basic "Restricted Access";
 	::Ficheiro que contém os utilizadores que podem aceder à interface web do Kibana e Plugins do Elasticsearch
 	auth_basic_user_file /etc/nginx/htpasswd.users;
