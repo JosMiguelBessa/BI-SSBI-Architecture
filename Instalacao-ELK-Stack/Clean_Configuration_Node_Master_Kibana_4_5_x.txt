@@ -1,26 +1,26 @@
-::InstalaÁ„o da stack ELK (Elasticsearch, Logstash e Kibana):
+::Instala√ß√£o da stack ELK (Elasticsearch, Logstash e Kibana):
 ::Sistema Operativo: Ubuntu 14.04.4 Server amd64
-::Vers„o Java: 8
-::Vers„o Elasticsearch: 2.3.x
-::Vers„o Logstash: 2.3.x
-::Vers„o Kibana: 4.5.x
+::Vers√£o Java: 8
+::Vers√£o Elasticsearch: 2.3.x
+::Vers√£o Logstash: 2.3.x
+::Vers√£o Kibana: 4.5.x
 ::Data: 01/12/2016 (02:30h)
 ::#######################################################################################################################################################################
-::InstalaÁ„o do Java (vers„o 8)
+::Instala√ß√£o do Java (vers√£o 8)
 
-::Adicionar o Oracle Java PPA ‡ ferramenta APT
+::Adicionar o Oracle Java PPA √† ferramenta APT
 add-apt-repository -y ppa:webupd8team/java
 
 ::Atualizar a base de dados de packages da ferramenta APT
 apt-get update
 
-::Instalar a ˙ltima vers„o est·vel do Java v.8 (com pop-up gr·fico para aceitar os termos de licenÁa)
+::Instalar a √∫ltima vers√£o est√°vel do Java v.8 (com pop-up gr√°fico para aceitar os termos de licen√ßa)
 apt-get -y install oracle-java8-installer
 ::#######################################################################################################################################################################
-::InstalaÁ„o da Base de Dados Elasticsearch
+::Instala√ß√£o da Base de Dados Elasticsearch
 
-::Elasticsearch pode ser instalado com o package manager ao adicionar o pacote Elastic ‡ source list
-::Executar o seguinte comando para importar a chave p˙blica GPG do Elasticsearch para a ferramenta APT
+::Elasticsearch pode ser instalado com o package manager ao adicionar o pacote Elastic √† source list
+::Executar o seguinte comando para importar a chave p√∫blica GPG do Elasticsearch para a ferramenta APT
 wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 
 ::Criar a source list do Elasticsearch
@@ -29,16 +29,16 @@ echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sud
 ::Atualizar a base de dados de packages da ferramenta APT
 apt-get update
 
-::Instalar do serviÁo Elasticsearch
+::Instalar do servi√ßo Elasticsearch
 apt-get -y install elasticsearch
 
-::Reiniciar o serviÁo elasticsearch
+::Reiniciar o servi√ßo elasticsearch
 service elasticsearch restart
 
-::Executar o serviÁo elasticsearch no arranque do sistema
+::Executar o servi√ßo elasticsearch no arranque do sistema
 update-rc.d elasticsearch defaults 95 10
 ::#######################################################################################################################################################################
-::InstalaÁ„o do Kibana
+::Instala√ß√£o do Kibana
 
 ::Criar a source list do Kibana source
 echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -a /etc/apt/sources.list.d/kibana-4.5.x.list
@@ -46,25 +46,25 @@ echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -
 ::Atualizar a base de dados de packages da ferramenta APT
 apt-get update
 
-::Instalar do serviÁo Kibana
+::Instalar do servi√ßo Kibana
 apt-get -y install kibana
 
-::Autorizar o serviÁo Kibana e arranc·-lo
+::Autorizar o servi√ßo Kibana e arranc√°-lo
 update-rc.d kibana defaults 96 9
 service kibana start
 ::#######################################################################################################################################################################
-::InstalaÁ„o do NGINX (Proxy Reverso)
+::Instala√ß√£o do NGINX (Proxy Reverso)
 
-::UtilizaÁ„o da ferramenta APT para instalar o NGINX e Apache2-utils
+::Utiliza√ß√£o da ferramenta APT para instalar o NGINX e Apache2-utils
 apt-get install nginx apache2-utils
 
-::Utilizar htpasswd para criar um administrador para aceder ‡ interface web do Kibana
-::Definir password apÛs a execuÁ„o do comando seguinte. Lembrar este login, pois ser· necess·rio para aceder ‡ interface web do Kibana
+::Utilizar htpasswd para criar um administrador para aceder √† interface web do Kibana
+::Definir password ap√≥s a execu√ß√£o do comando seguinte. Lembrar este login, pois ser√° necess√°rio para aceder √† interface web do Kibana
 htpasswd -c /etc/nginx/htpasswd.users AdminKibanaSic
 ::#######################################################################################################################################################################
-::InstalaÁ„o do Logstash
+::Instala√ß√£o do Logstash
 
-::O package Logstash est· disponÌvel no mesmo diretÛrio em que È disponibilizado o package do Elasticsearch, pelo que a chave p˙blica foi previamente instalada. Em seguida È tambÈm criada a source list do Logstash
+::O package Logstash est√° dispon√≠vel no mesmo diret√≥rio em que √© disponibilizado o package do Elasticsearch, pelo que a chave p√∫blica foi previamente instalada. Em seguida √© tamb√©m criada a source list do Logstash
 echo 'deb http://packages.elastic.co/logstash/2.3/debian stable main' | sudo tee /etc/apt/sources.list.d/logstash-2.3.x.list
 
 ::Atualizar a base de dados de packages da ferramenta APT
@@ -73,13 +73,13 @@ apt-get update
 ::Instalar o Logstash
 apt-get install logstash
 
-::O comando seguinte deve ser utilizado para versıes do Logstash superior ‡ 1.4.2
-::Este comando permitir· evitar problemas com Jruby quando s„o executados os filtros de configuraÁ„o do logstash (para a limpeza e para o carregamento de dados)
+::O comando seguinte deve ser utilizado para vers√µes do Logstash superior √† 1.4.2
+::Este comando permitir√° evitar problemas com Jruby quando s√£o executados os filtros de configura√ß√£o do logstash (para a limpeza e para o carregamento de dados)
 ln -s /lib/x86_64-linux-gnu/libcrypt.so.1 /usr/lib/x86_64-linux-gnu/libcrypt.so
 ::#######################################################################################################################################################################
-::InstalaÁ„o de plugins para o Elasticsearch:
+::Instala√ß√£o de plugins para o Elasticsearch:
 
-::A instalaÁ„o de qualquer plugin do Elasticsearch, dever· ser intalado no diretÛrio: /usr/share/elasticsearch
+::A instala√ß√£o de qualquer plugin do Elasticsearch, dever√° ser intalado no diret√≥rio: /usr/share/elasticsearch
 
 ::Instalar o plugin Elastic HQ para gerir as bases de dados Elasticsearch criadas
 bin/plugin install royrusso/elasticsearch-HQ
@@ -87,27 +87,27 @@ bin/plugin install royrusso/elasticsearch-HQ
 ::Instalar o plugin Kopf para gerir as bases de dados Elasticsearch criadas
 bin/plugin install lmenezes/elasticsearch-kopf/
 
-::Instalar o plugin Shield para seguranÁa das bases de dados Elasticsearch criadas
+::Instalar o plugin Shield para seguran√ßa das bases de dados Elasticsearch criadas
 bin/plugin install license
 bin/plugin install shield
 ::#######################################################################################################################################################################
-::InstalaÁ„o de plugins do Kibana
+::Instala√ß√£o de plugins do Kibana
 
-::A instalaÁ„o de qualquer plugin do Elasticsearch, dever· ser intalado no diretÛrio: /opt/kibana
-::Este plugin permite dispor de uma interface gr·fica embebida no Kibana, orientada para desenvolvedores, que permite utilizar JSON para realizar operaÁıes 
+::A instala√ß√£o de qualquer plugin do Elasticsearch, dever√° ser intalado no diret√≥rio: /opt/kibana
+::Este plugin permite dispor de uma interface gr√°fica embebida no Kibana, orientada para desenvolvedores, que permite utilizar JSON para realizar opera√ß√µes 
 ::sobre as pesquisas de dados
 
 ::Instalar o plugin Sense
 ./bin/kibana plugin --install elastic/sense
 ./bin/kibana
 ::#######################################################################################################################################################################
-::InstalaÁ„o de GeoIP (Base de dados MaxMind - Gratuita):
+::Instala√ß√£o de GeoIP (Base de dados MaxMind - Gratuita):
 
-::Download da base de dados utilizadas para GeoIP para o diretÛrio /etc/logstash directory
+::Download da base de dados utilizadas para GeoIP para o diret√≥rio /etc/logstash directory
 cd /etc/logstash
 curl -O "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz"
 
-::Fazer a extraÁ„o do ficheiro
+::Fazer a extra√ß√£o do ficheiro
 gunzip GeoLiteCity.dat.gz
 
 ::Editar o filtro NGINX:
@@ -132,6 +132,6 @@ filter {
   }
 }
 
-::Para que sejam consideradas as alteraÁıes feitas no Logstash, deve ser executado o seguinte comando
+::Para que sejam consideradas as altera√ß√µes feitas no Logstash, deve ser executado o seguinte comando
 service logstash restart
 ::#######################################################################################################################################################################
