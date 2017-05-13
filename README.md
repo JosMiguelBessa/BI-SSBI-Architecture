@@ -5,7 +5,7 @@ Neste repositório são disponibilizados alguns documentos que foram utilizados 
   - Indexação de dados (Anexo B);
   - Instalação da arquitetura de BI/SSBI (Anexo C);
   - Customização da arquitetura de BI/SSBI (Anexo D).
-<br><br>
+<br><br> 
 <p align="center">
   <img src="https://raw.githubusercontent.com/JosMiguelBessa/BI-SSBI-Architecture/master/img/Arquitetura_Sistema_BI_SSBI.png" width="550"/>
 </p>
