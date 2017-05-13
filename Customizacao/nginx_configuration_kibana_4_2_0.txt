@@ -34,7 +34,7 @@ server
 	}
 
 	::Localização do Kibana (separador Discover - "Home Page")
-	location /kibana
+	location /kibana 
 	{
 		proxy_pass http://127.0.0.1:5601/app/kibana;
 		::Versão do protocolo HTTP
