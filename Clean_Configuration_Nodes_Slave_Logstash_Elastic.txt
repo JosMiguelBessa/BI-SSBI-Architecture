@@ -1,0 +1,61 @@
+::Instalação da stack ELK (Elasticsearch e Logstash apenas):
+::Sistema Operativo: Ubuntu 14.04.4 Server amd64
+::Versão Java: 8
+::Versão Elasticsearch: 2.3.x
+::Versão Logstash: 2.3.x
+::Data: 01/12/2016 (02:30h)
+::#######################################################################################################################################################################
+::Instalação do Java (versão 8)
+
+::Adicionar o Oracle Java PPA à ferramenta APT
+add-apt-repository -y ppa:webupd8team/java
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar a última versão estável do Java v.8 (com pop-up gráfico para aceitar os termos de licença)
+apt-get -y install oracle-java8-installer
+::#######################################################################################################################################################################
+::Instalação da Base de Dados Elasticsearch
+
+::Elasticsearch pode ser instalado com o package manager ao adicionar o pacote Elastic à source list
+::Executar o seguinte comando para importar a chave pública GPG do Elasticsearch para a ferramenta APT
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+::Criar a source list do Elasticsearch
+echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar do serviço Elasticsearch
+apt-get -y install elasticsearch
+
+::Reiniciar o serviço elasticsearch
+service elasticsearch restart
+
+::Executar o serviço elasticsearch no arranque do sistema
+update-rc.d elasticsearch defaults 95 10
+::#######################################################################################################################################################################
+::Instalação do Logstash
+
+::O package Logstash está disponível no mesmo diretório em que é disponibilizado o package do Elasticsearch, pelo que a chave pública foi previamente instalada. Em seguida é também criada a source list do Logstash
+echo 'deb http://packages.elastic.co/logstash/2.3/debian stable main' | sudo tee /etc/apt/sources.list.d/logstash-2.3.x.list
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar o Logstash
+apt-get install logstash
+
+::O comando seguinte deve ser utilizado para versões do Logstash superior à 1.4.2
+::Este comando permitirá evitar problemas com Jruby quando são executados os filtros de configuração do logstash (para a limpeza e para o carregamento de dados)
+ln -s /lib/x86_64-linux-gnu/libcrypt.so.1 /usr/lib/x86_64-linux-gnu/libcrypt.so
+::#######################################################################################################################################################################
+::Instalação de plugins para o Elasticsearch:
+
+::A instalação de qualquer plugin do Elasticsearch, deverá ser intalado no diretório: /usr/share/elasticsearch
+
+::Instalar o plugin Shield para segurança das bases de dados Elasticsearch criadas
+bin/plugin install license
+bin/plugin install shield

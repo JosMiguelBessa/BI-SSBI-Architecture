@@ -1,0 +1,137 @@
+::Instalação da stack ELK (Elasticsearch, Logstash e Kibana):
+::Sistema Operativo: Ubuntu 14.04.4 Server amd64
+::Versão Java: 8
+::Versão Elasticsearch: 2.3.x
+::Versão Logstash: 2.3.x
+::Versão Kibana: 4.5.x
+::Data: 01/12/2016 (02:30h)
+::#######################################################################################################################################################################
+::Instalação do Java (versão 8)
+
+::Adicionar o Oracle Java PPA à ferramenta APT
+add-apt-repository -y ppa:webupd8team/java
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar a última versão estável do Java v.8 (com pop-up gráfico para aceitar os termos de licença)
+apt-get -y install oracle-java8-installer
+::#######################################################################################################################################################################
+::Instalação da Base de Dados Elasticsearch
+
+::Elasticsearch pode ser instalado com o package manager ao adicionar o pacote Elastic à source list
+::Executar o seguinte comando para importar a chave pública GPG do Elasticsearch para a ferramenta APT
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+::Criar a source list do Elasticsearch
+echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar do serviço Elasticsearch
+apt-get -y install elasticsearch
+
+::Reiniciar o serviço elasticsearch
+service elasticsearch restart
+
+::Executar o serviço elasticsearch no arranque do sistema
+update-rc.d elasticsearch defaults 95 10
+::#######################################################################################################################################################################
+::Instalação do Kibana
+
+::Criar a source list do Kibana source
+echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -a /etc/apt/sources.list.d/kibana-4.5.x.list
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar do serviço Kibana
+apt-get -y install kibana
+
+::Autorizar o serviço Kibana e arrancá-lo
+update-rc.d kibana defaults 96 9
+service kibana start
+::#######################################################################################################################################################################
+::Instalação do NGINX (Proxy Reverso)
+
+::Utilização da ferramenta APT para instalar o NGINX e Apache2-utils
+apt-get install nginx apache2-utils
+
+::Utilizar htpasswd para criar um administrador para aceder à interface web do Kibana
+::Definir password após a execução do comando seguinte. Lembrar este login, pois será necessário para aceder à interface web do Kibana
+htpasswd -c /etc/nginx/htpasswd.users AdminKibanaSic
+::#######################################################################################################################################################################
+::Instalação do Logstash
+
+::O package Logstash está disponível no mesmo diretório em que é disponibilizado o package do Elasticsearch, pelo que a chave pública foi previamente instalada. Em seguida é também criada a source list do Logstash
+echo 'deb http://packages.elastic.co/logstash/2.3/debian stable main' | sudo tee /etc/apt/sources.list.d/logstash-2.3.x.list
+
+::Atualizar a base de dados de packages da ferramenta APT
+apt-get update
+
+::Instalar o Logstash
+apt-get install logstash
+
+::O comando seguinte deve ser utilizado para versões do Logstash superior à 1.4.2
+::Este comando permitirá evitar problemas com Jruby quando são executados os filtros de configuração do logstash (para a limpeza e para o carregamento de dados)
+ln -s /lib/x86_64-linux-gnu/libcrypt.so.1 /usr/lib/x86_64-linux-gnu/libcrypt.so
+::#######################################################################################################################################################################
+::Instalação de plugins para o Elasticsearch:
+
+::A instalação de qualquer plugin do Elasticsearch, deverá ser intalado no diretório: /usr/share/elasticsearch
+
+::Instalar o plugin Elastic HQ para gerir as bases de dados Elasticsearch criadas
+bin/plugin install royrusso/elasticsearch-HQ
+
+::Instalar o plugin Kopf para gerir as bases de dados Elasticsearch criadas
+bin/plugin install lmenezes/elasticsearch-kopf/
+
+::Instalar o plugin Shield para segurança das bases de dados Elasticsearch criadas
+bin/plugin install license
+bin/plugin install shield
+::#######################################################################################################################################################################
+::Instalação de plugins do Kibana
+
+::A instalação de qualquer plugin do Elasticsearch, deverá ser intalado no diretório: /opt/kibana
+::Este plugin permite dispor de uma interface gráfica embebida no Kibana, orientada para desenvolvedores, que permite utilizar JSON para realizar operações 
+::sobre as pesquisas de dados
+
+::Instalar o plugin Sense
+./bin/kibana plugin --install elastic/sense
+./bin/kibana
+::#######################################################################################################################################################################
+::Instalação de GeoIP (Base de dados MaxMind - Gratuita):
+
+::Download da base de dados utilizadas para GeoIP para o diretório /etc/logstash directory
+cd /etc/logstash
+curl -O "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz"
+
+::Fazer a extração do ficheiro
+gunzip GeoLiteCity.dat.gz
+
+::Editar o filtro NGINX:
+nano /etc/logstash/conf.d/11-nginx-filter.conf
+
+::Filtro utilizado para recolher as coordenadas (longitude e latitude) presentes nos dados processados
+filter {
+  if [type] == "nginx-access" {
+    grok {
+      match => { "message" => "%{NGINXACCESS}" }
+    }
+    geoip {
+      source => "clientip"
+      target => "geoip"
+      database => "/etc/logstash/GeoLiteCity.dat"
+      add_field => [ "[geoip][coordinates]", "%{[geoip][longitude]}" ]
+      add_field => [ "[geoip][coordinates]", "%{[geoip][latitude]}"  ]
+    }
+    mutate {
+      convert => [ "[geoip][coordinates]", "float"]
+    }
+  }
+}
+
+::Para que sejam consideradas as alterações feitas no Logstash, deve ser executado o seguinte comando
+service logstash restart
+::#######################################################################################################################################################################
