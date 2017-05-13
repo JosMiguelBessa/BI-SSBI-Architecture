@@ -2,7 +2,7 @@
 	"template": "dhcp-*", // Template aplicado a todas as bases de dados que comecem por dhcp-
 		"mappings": // Customizações a serem feitas nos campos
 		{
-			"dhcplogs": // Tipo do evento
+			"dhcplogs": // Tipo do evento 
 			{
 				"properties": // Listagem de todos os campos que constituem um evento do tipo dhcplogs, bem como os seus tipos
 				{		
