@@ -1,0 +1,67 @@
+{
+	"template": "hpudp-*", // Template aplicado a todas as bases de dados que comecem por hpudp-
+		"mappings": // Customizações a serem feitas nos campos
+		{
+			"hpudplogs": // Tipo do evento
+			{
+				"properties": // Listagem de todos os campos que constituem um evento do tipo hpudplogs, bem como os seus tipos
+				{
+					"@timestamp":{"type":"date","format":"dateOptionalTime"}, //Definir que a data é definida de forma livre no filtro que faz o parse dos eventos
+					"@version":{"type":"string"},
+					"udp_geo_ip_origin" : //Campo com várias propriedades
+					{
+						"properties" : 
+						{
+							"area_code" : {"type" : "long", "index":"not_analyzed"}, //O valor not_analyzed significa que é para considerar totalmente os dados de um campo sem os analizar. No caso de um campo string, caso não exista esta costumização, só irá considerar os dados até ao primeiro espaço
+							"city_name" : {"type" : "string", "index":"not_analyzed"},
+							"continent_code" : {"type" : "string", "index":"not_analyzed"},
+							"country_code2" : {"type" : "string", "index":"not_analyzed"},
+							"country_code3" : {"type" : "string", "index":"not_analyzed"},
+							"country_name" : {"type" : "string", "index":"not_analyzed"},
+							"dma_code" : {"type" : "long", "index":"not_analyzed"},
+							"ip" : {"type" : "string", "index":"not_analyzed"},
+							"latitude" : {"type" : "double", "index":"not_analyzed"},
+							"location" : {"type" : "geo_point", "index":"not_analyzed"},
+							"longitude" : {"type" : "double", "index":"not_analyzed"},
+							"postal_code" : {"type" : "string", "index":"not_analyzed"},
+							"real_region_name" : {"type" : "string", "index":"not_analyzed"},
+							"region_name" : {"type" : "string", "index":"not_analyzed"},
+							"timezone" : {"type" : "string", "index":"not_analyzed"}
+						}
+					},
+					"udp_geo_ip_destiny" : 
+					{
+						"properties" : 
+						{
+							"area_code" : {"type" : "long", "index":"not_analyzed"},
+							"city_name" : {"type" : "string", "index":"not_analyzed"},
+							"continent_code" : {"type" : "string", "index":"not_analyzed"},
+							"country_code2" : {"type" : "string", "index":"not_analyzed"},
+							"country_code3" : {"type" : "string", "index":"not_analyzed"},
+							"country_name" : {"type" : "string", "index":"not_analyzed"},
+							"dma_code" : {"type" : "long", "index":"not_analyzed"},
+							"ip" : {"type" : "string", "index":"not_analyzed"},
+							"latitude" : {"type" : "double", "index":"not_analyzed"},
+							"location" : {"type" : "geo_point", "index":"not_analyzed"},
+							"longitude" : {"type" : "double", "index":"not_analyzed"},
+							"postal_code" : {"type" : "string", "index":"not_analyzed"},
+							"real_region_name" : {"type" : "string", "index":"not_analyzed"},
+							"region_name" : {"type" : "string", "index":"not_analyzed"},
+							"timezone" : {"type" : "string", "index":"not_analyzed"}
+						}
+					},
+					"ip_destiny_udp":{"type":"string", "index":"not_analyzed"},
+					"ip_origin_udp":{"type":"string", "index":"not_analyzed"},
+					"operating_system_udp":{"type":"string", "index":"not_analyzed"},
+					"packet_size_received_udp":{"type":"string", "index":"not_analyzed"},
+					"packet_size_sent_udp":{"type":"string", "index":"not_analyzed"},
+					"port_destiny_udp":{"type":"string", "index":"not_analyzed"},
+					"port_origin_udp":{"type":"string", "index":"not_analyzed"},
+					"host":{"type":"string"},
+					"message":{"type":"string"},
+					"path":{"type":"string"},
+					"type":{"type":"string"}
+				}
+			}		
+		}
+}

@@ -1,0 +1,24 @@
+{
+	"template": "dns-*", // Template aplicado a todas as bases de dados que comecem por dns-
+		"mappings": // Customizações a serem feitas nos campos
+		{
+			"dnslogs": // Tipo do evento
+			{
+				"properties": // Listagem de todos os campos que constituem um evento do tipo dnslogs, bem como os seus tipos
+				{
+					"@timestamp":{"type":"date","format":"dateOptionalTime"}, //Definir que a data é definida de forma livre no filtro que faz o parse dos eventos
+					"@version":{"type":"string"},
+					"datelog":{"type":"string"},
+					"dns_client_ip":{"type":"string", "index":"not_analyzed"}, //O valor not_analyzed significa que é para considerar totalmente os dados de um campo sem os analizar. No caso de um campo string, caso não exista esta costumização, só irá considerar os dados até ao primeiro espaço
+					"dns_dest":{"type":"string", "index":"not_analyzed"},
+					"dns_record":{"type":"string", "index":"not_analyzed"},
+					"dns_uuid":{"type":"string", "index":"not_analyzed"},
+					"host":{"type":"string", "index":"not_analyzed"},
+					"message":{"type":"string"},
+					"path":{"type":"string"},
+					"tags":{"type":"string", "index":"not_analyzed"},
+					"type":{"type":"string"}					
+				}
+			}		
+		}
+}

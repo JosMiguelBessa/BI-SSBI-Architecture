@@ -1,0 +1,31 @@
+{
+	"template": "openedtickets-*", // Template aplicado a todas as bases de dados que comecem por openedtickets-
+		"mappings": // Customizações a serem feitas nos campos
+		{
+			"openedticketslogs": // Tipo do evento
+			{
+				"properties": // Listagem de todos os campos que constituem um evento do tipo openedticketslogs, bem como os seus tipos
+				{
+					"@timestamp": {"type":"date","format":"dateOptionalTime"}, //Definir que a data é definida de forma livre no filtro que faz o parse dos eventos
+					"@version": {"type":"string"},
+					"changed_datalog": {"type":"string","index":"not_analyzed"}, //O valor not_analyzed significa que é para considerar totalmente os dados de um campo sem os analizar. No caso de um campo string, caso não exista esta costumização, só irá considerar os dados até ao primeiro espaço
+					"created_datalog": {"type":"string","index":"not_analyzed"},
+					"customer_id_ticket": {"type":"string","index":"not_analyzed"},
+					"customer_user_ticket": {"type":"string","index":"not_analyzed"},
+					"queue_ticket": {"type":"string","index":"not_analyzed"},
+					"service_ticket": {"type":"string","index":"not_analyzed"},
+					"state_ticket": {"type":"string","index":"not_analyzed"},
+					"title_ticket": {"type":"string","index":"not_analyzed"},
+					"host": {"type":"string"},
+					"message": {"type":"string"},
+					"path": {"type":"string"},
+					"type":{"type":"string"},
+					"empty_end_message_ticket":{"type":"string"},
+					"changed_time":{"type":"string"},
+					"changed_date":{"type":"string"},
+					"created_time":{"type":"string"},
+					"created_date":{"type":"string"}
+				}
+			}
+		}
+}

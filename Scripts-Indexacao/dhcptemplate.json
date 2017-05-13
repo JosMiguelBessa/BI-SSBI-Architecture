@@ -1,0 +1,25 @@
+{
+	"template": "dhcp-*", // Template aplicado a todas as bases de dados que comecem por dhcp-
+		"mappings": // Customizações a serem feitas nos campos
+		{
+			"dhcplogs": // Tipo do evento
+			{
+				"properties": // Listagem de todos os campos que constituem um evento do tipo dhcplogs, bem como os seus tipos
+				{		
+					"@timestamp":{"type":"date","format":"dateOptionalTime"}, //Definir que a data é definida de forma livre no filtro que faz o parse dos eventos
+					"@version":{"type":"string"},
+					"datelog":{"type":"string"},
+					"dhcp_action":{"type":"string", "index":"not_analyzed"}, //O valor not_analyzed significa que é para considerar totalmente os dados de um campo sem os analizar. No caso de um campo string, caso não exista esta costumização, só irá considerar os dados até ao primeiro espaço
+					"dhcp_action_test":{"type":"string", "index":"not_analyzed"},
+					"dhcp_client_ip":{"type":"string", "index":"not_analyzed"},
+					"dhcp_client_mac":{"type":"string", "index":"not_analyzed"},
+					"host":{"type":"string"},
+					"hostname":{"type":"string", "index":"not_analyzed"},
+					"interface":{"type":"string", "index":"not_analyzed"},
+					"message":{"type":"string"},
+					"path":{"type":"string"},
+					"type":{"type":"string"}
+				}
+			}		
+		}
+}
