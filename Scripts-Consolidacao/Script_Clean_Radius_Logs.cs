@@ -17,15 +17,15 @@ namespace Script_Clean_Radius_Logs
     {
         public Form1()
         {
-			//Método instanciado por defeito utilizado para inicializar a interface gráfica da aplicação
+	    //Método instanciado por defeito utilizado para inicializar a interface gráfica da aplicação
             InitializeComponent();
-			//Esconder progress bar quando arranca o programa
+	    //Esconder progress bar quando arranca o programa
             progressBarClean.Visible = false;
-			//Valor mínimo da progress bar
+	    //Valor mínimo da progress bar
             progressBarClean.Minimum = 0;
-			//Valor adicionado à progress bar em cada iteração
+	    //Valor adicionado à progress bar em cada iteração
             progressBarClean.Step = 1;
-			//Esconder label relativo a etapa 1
+	    //Esconder label relativo a etapa 1
             label_step_1.Visible = false;
         }
         private void buttonCleanLogs_Click(object sender, EventArgs e)
@@ -174,16 +174,16 @@ namespace Script_Clean_Radius_Logs
             //contador para a barra de progresso que indica em que percentagem está a limpeza
             int count_max_prog_bar = 0;
   
-			//Verificar se foi preenchido o caminho para um ficheiro
+	    //Verificar se foi preenchido o caminho para um ficheiro
             if (string.IsNullOrEmpty(textBoxPathFile.Text))
             {
-				//Apresentar uma mensagem caso não tenha sido preenchido o caminho para um ficheiro
+		//Apresentar uma mensagem caso não tenha sido preenchido o caminho para um ficheiro
                 MessageBox.Show("Path não foi preenchida!!!\nPreencha primeiro a path!!");
             }
-			//Caso tenha sido preenchido o caminho para o ficheiro
+	    //Caso tenha sido preenchido o caminho para o ficheiro
             else
             {
-				//Verificar se o ficheiro existe
+		//Verificar se o ficheiro existe
                 if (File.Exists(textBoxPathFile.Text))
                 {
                     //Adicionar onde guardar ficheiro
@@ -192,7 +192,7 @@ namespace Script_Clean_Radius_Logs
                     saveFileDialog1.Filter = "Text File (.txt) | *.txt";
                     saveFileDialog1.FilterIndex = 1;
 					
-					//Definir localização de onde será guardado o ficheiro com os eventos consolidados e transformados
+		    //Definir localização de onde será guardado o ficheiro com os eventos consolidados e transformados
                     if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     {
                         savefilename = saveFileDialog1.FileName;
@@ -222,7 +222,7 @@ namespace Script_Clean_Radius_Logs
                         temp2 = "";
                         encontrou = false;
 
-						//Definir valores por defeito das variáveis (campos dos eventos)
+			//Definir valores por defeito das variáveis (campos dos eventos)
                         if (line == "")
                         {
                             if (data == "")
@@ -519,7 +519,7 @@ namespace Script_Clean_Radius_Logs
                             progressBarClean.Increment(1);
                             int percent = (int)(((double)(progressBarClean.Value - progressBarClean.Minimum) /
                                     (double)(progressBarClean.Maximum - progressBarClean.Minimum)) * 100);
-							//Atualizar de forma gráfica o preenchimento da progress bar
+			    //Atualizar de forma gráfica o preenchimento da progress bar
                             using (Graphics gr = progressBarClean.CreateGraphics())
                             {
                                 gr.DrawString(percent.ToString() + "%",
@@ -986,13 +986,13 @@ namespace Script_Clean_Radius_Logs
                     }
                     File.AppendAllText(savefilename, "END");
                     
-					//Fazer reset dos valores da progress bar
-					progressBarClean.Visible = false;
+		    //Fazer reset dos valores da progress bar
+		    progressBarClean.Visible = false;
                     progressBarClean.Value = 0;
                     progressBarClean.Minimum = 0;
                     progressBarClean.Step = 1;
 					
-					//Step 2 - Remover aspas de cada log
+		    //Step 2 - Remover aspas de cada log
                     var fileSecond = File.ReadAllLines(savefilename);
                     string tempi = "";
                     progressBarClean.Visible = true;
@@ -1017,7 +1017,7 @@ namespace Script_Clean_Radius_Logs
                         progressBarClean.Increment(1);
                         int percent = (int)(((double)(progressBarClean.Value - progressBarClean.Minimum) /
                                 (double)(progressBarClean.Maximum - progressBarClean.Minimum)) * 100);
-						//Atualizar de forma gráfica o preenchimento da progress bar
+			//Atualizar de forma gráfica o preenchimento da progress bar
                         using (Graphics gr = progressBarClean.CreateGraphics())
                         {
                             gr.DrawString(percent.ToString() + "%",
@@ -1033,7 +1033,7 @@ namespace Script_Clean_Radius_Logs
                     string tempi2 = "";
                     File.Delete(savefilename);
 					
-					//Fazer reset dos valores da progress bar
+		    //Fazer reset dos valores da progress bar
                     progressBarClean.Value = 0;
                     progressBarClean.Minimum = 0;
                     progressBarClean.Step = 1;
@@ -1041,7 +1041,7 @@ namespace Script_Clean_Radius_Logs
                     label_step_1.Text = "Step: 3/3";
                     label_step_1.Refresh();
 					
-					//Step 3 - Remover duplo espaço em branco e substituir por apenas um espaço para cada log
+		    //Step 3 - Remover duplo espaço em branco e substituir por apenas um espaço para cada log
                     foreach (var lineThrcount in fileSecond2)
                     {
                         tempi2 = "";
@@ -1061,7 +1061,7 @@ namespace Script_Clean_Radius_Logs
                         progressBarClean.Increment(1);
                         int percent = (int)(((double)(progressBarClean.Value - progressBarClean.Minimum) /
                                 (double)(progressBarClean.Maximum - progressBarClean.Minimum)) * 100);
-						//Atualizar de forma gráfica o preenchimento da progress bar
+			//Atualizar de forma gráfica o preenchimento da progress bar
                         using (Graphics gr = progressBarClean.CreateGraphics())
                         {
                             gr.DrawString(percent.ToString() + "%",
@@ -1074,22 +1074,22 @@ namespace Script_Clean_Radius_Logs
                         }
                     }
 
-					//Progress bar é escondida
+		    //Progress bar é escondida
                     progressBarClean.Visible = false;
-					//Habilitar novamente os controlos sobre a aplicação
+		    //Habilitar novamente os controlos sobre a aplicação
                     this.ControlBox = true;
-					//O botão de consolidação é colocado vísivel
+		    //O botão de consolidação é colocado vísivel
                     buttonCleanLogs.Visible = true;
-					//Label da primeira etapa colocada visível
+		    //Label da primeira etapa colocada visível
                     label_step_1.Visible = false;
-					//Label da primeira etapa colocada visível e atualizada
+		    //Label da primeira etapa colocada visível e atualizada
                     label_step_1.Refresh();
-					//Remover ficheiro temporário
+		    //Remover ficheiro temporário
                     File.Delete(path_temp_file);
-					//Mensagem de aviso ao utilizador de que a consolidação e transformação está terminada
+		    //Mensagem de aviso ao utilizador de que a consolidação e transformação está terminada
                     MessageBox.Show("A Consolidação e transformação do ficheiro está concluída!!!");
                 }
-				//Caso o ficheiro não exista é lançada uma mensagem a avisar o utilizador que o ficheiro selecionado não é válido
+		//Caso o ficheiro não exista é lançada uma mensagem a avisar o utilizador que o ficheiro selecionado não é válido
                 else
                 {
                      MessageBox.Show("O ficheiro introduzido não é válido!!!\nTente novamente!!!");
@@ -1097,7 +1097,7 @@ namespace Script_Clean_Radius_Logs
             }
         }
 		
-		//Função Click do botão para abrir um ficheiro para processar
+        //Função Click do botão para abrir um ficheiro para processar
         private void textBoxPathFile_Click(object sender, EventArgs e)
         {
             //Adicionar qual ficheiro a abrir
@@ -1106,7 +1106,7 @@ namespace Script_Clean_Radius_Logs
             openFileDialog1.Filter = "Text File (.txt) | *.txt";
             openFileDialog1.FilterIndex = 1;
 
-			//Validar o ficheiro escolhido, carregando no botão OK
+	    //Validar o ficheiro escolhido, carregando no botão OK
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBoxPathFile.Text = openFileDialog1.FileName;
